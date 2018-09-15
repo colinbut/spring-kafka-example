@@ -6,6 +6,7 @@
 package com.mycompany.spring.kafka.springkafkaexample.consumer;
 
 import com.mycompany.spring.kafka.springkafkaexample.config.KafkaConfig;
+import com.mycompany.spring.kafka.springkafkaexample.message.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,7 +23,7 @@ public class AppConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConsumer.class);
 
     @KafkaListener(
-        topicPartitions = @TopicPartition(topic = KafkaConfig.TOPIC_NAME,
+        topicPartitions = @TopicPartition(topic = KafkaConfig.TOPIC_NAME_STRING,
             partitionOffsets = {
                 @PartitionOffset(partition = "0", initialOffset = "0"),
                 @PartitionOffset(partition = "3", initialOffset = "0")
@@ -34,5 +35,13 @@ public class AppConsumer {
                        @Payload String message) {
         LOGGER.info(String.format("Received Message %s in group id: %s from partition: %d",
             KafkaConfig.GROUP_ID, message, partition));
+    }
+
+    @KafkaListener(
+        topics = KafkaConfig.TOPIC_NAME_JSON,
+        containerFactory = "jsonKafkaListenerContainerFactory"
+    )
+    public void listenToJsonMessage(Customer customer) {
+        LOGGER.info(String.format("Received customer : %s", customer));
     }
 }
