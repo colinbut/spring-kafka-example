@@ -13,4 +13,6 @@ public final class KafkaConfig {
     public static final String TOPIC_NAME_JSON = "spring.kafka.topic.json";
 
     public static final String GROUP_ID = "1";
+
+    public static final String KAFKA_BOOTSTRAP_SERVERS = "localhost:9092";
 }
