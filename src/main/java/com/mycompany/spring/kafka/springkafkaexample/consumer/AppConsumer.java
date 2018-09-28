@@ -6,9 +6,11 @@
 package com.mycompany.spring.kafka.springkafkaexample.consumer;
 
 import com.mycompany.spring.kafka.springkafkaexample.config.KafkaConfig;
+import com.mycompany.spring.kafka.springkafkaexample.config.KafkaProperties;
 import com.mycompany.spring.kafka.springkafkaexample.message.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.PartitionOffset;
 import org.springframework.kafka.annotation.TopicPartition;
@@ -22,6 +24,9 @@ public class AppConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConsumer.class);
 
+    @Autowired
+    private KafkaProperties kafkaProperties;
+
     @KafkaListener(
         topicPartitions = @TopicPartition(topic = KafkaConfig.TOPIC_NAME_STRING,
             partitionOffsets = {
@@ -34,7 +39,7 @@ public class AppConsumer {
     public void listen(@Header(KafkaHeaders.PARTITION_ID) int partition,
                        @Payload String message) {
         LOGGER.info(String.format("Received Message %s in group id: %s from partition: %d",
-            KafkaConfig.GROUP_ID, message, partition));
+            kafkaProperties.getGroupId(), message, partition));
     }
 
     @KafkaListener(
